@@ -1,1 +1,1 @@
-include ':blocparty'
+include ':blocparty', ':facebook'
