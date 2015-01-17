@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">BlocParty</string>
+    <string name="app_id">405174902993677</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="txt_fb_logged_in">You Are Logged In</string>
 </resources>

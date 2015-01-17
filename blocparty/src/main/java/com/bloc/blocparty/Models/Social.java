@@ -7,4 +7,6 @@ public abstract class Social {
 
     public abstract SocialItem[] getFeed();
 
+    public abstract boolean likeItem(SocialItem item);
+
 }

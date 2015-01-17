@@ -10,4 +10,9 @@ public class Twitter extends Social {
 
         return new SocialItem[] {};
     }
+
+    @Override
+    public boolean likeItem(SocialItem item) {
+        return false;
+    }
 }

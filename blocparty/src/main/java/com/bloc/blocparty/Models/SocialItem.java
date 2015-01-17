@@ -30,12 +30,18 @@ public class SocialItem {
     public void setComment(String mComment) {  this.mComment = mComment; }
 
     public boolean isLike() { return mLike; }
-    public void setLike(boolean mLike) { this.mLike = mLike; }
 
     public String getUserId() { return mUserId; }
     public void setUserId(String mUserId) { this.mUserId = mUserId; }
 
     public Date getTimestamp() { return mTimestamp; }
     public void setTimestamp(Date mTimestamp) { this.mTimestamp = mTimestamp; }
+
+
+    public void toggleLike() {
+
+
+
+    }
 
 }

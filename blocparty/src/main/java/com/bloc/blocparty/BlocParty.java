@@ -3,6 +3,7 @@ package com.bloc.blocparty;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,21 +12,74 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.bloc.blocparty.Fragments.AccountsFragment;
 import com.facebook.*;
 
 
 
 public class BlocParty extends Activity {
 
-    @Override
+    // keep track of the resumed state of the app
+    private boolean isResumed = false;
+
+    private UiLifecycleHelper uiHelper;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+
+        @Override
+        public void call(Session session, SessionState state, Exception e) {
+
+            onSessionStateChange(session,state,e);
+        }
+    };
+
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        // For Facebook
+        uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_bloc_party);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new AccountsFragment())        // for now just get the account login fragment working
                     .commit();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+        isResumed = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+        isResumed = false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
     }
 
 
@@ -49,18 +103,11 @@ public class BlocParty extends Activity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     *  Called by the FB SDK callback when the session state has changed (login/logout)
+     *
      */
-    public static class PlaceholderFragment extends Fragment {
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_bloc_party, container, false);
-            return rootView;
-        }
     }
+
 }

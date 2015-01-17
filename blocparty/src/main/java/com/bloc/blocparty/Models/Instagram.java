@@ -11,4 +11,9 @@ public class Instagram extends Social {
         return new SocialItem[] {};
 
     }
+
+    @Override
+    public boolean likeItem(SocialItem item) {
+        return false;
+    }
 }

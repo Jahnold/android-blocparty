@@ -1,14 +1,25 @@
 package com.bloc.blocparty.Models;
 
+import com.facebook.Session;
+
 /**
- * Created by matthewarnold on 16/01/15.
+ *  Class responsible for all Facebook Interactions
  */
 public class Facebook extends Social {
 
     @Override
     public SocialItem[] getFeed() {
 
+
+
         return new SocialItem[] {};
 
     }
+
+    @Override
+    public boolean likeItem(SocialItem item) {
+        return false;
+    }
+
+
 }
