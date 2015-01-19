@@ -11,6 +11,7 @@ public class SocialItem {
 
 
     private Bitmap mImage;
+    private String mImageLink;
     private String mUserName;
     private String mComment;
     private boolean mLike;
@@ -19,6 +20,8 @@ public class SocialItem {
     private enum mNetwork {FACEBOOK, TWITTER, INSTAGRAM}
 
     // getters & setters
+    public String getImageLink() { return mImageLink; }
+    public void setImageLink(String imageLink) { this.mImageLink = imageLink;}
 
     public Bitmap getImage() { return mImage; }
     public void setImage(Bitmap mImage) { this.mImage = mImage; }

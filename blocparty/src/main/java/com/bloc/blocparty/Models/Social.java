@@ -5,7 +5,7 @@ package com.bloc.blocparty.Models;
  */
 public abstract class Social {
 
-    public abstract SocialItem[] getFeed();
+    public abstract void loadFeed();
 
     public abstract boolean likeItem(SocialItem item);
 
