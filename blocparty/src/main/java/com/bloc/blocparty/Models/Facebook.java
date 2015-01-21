@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.bloc.blocparty.Fragments.FeedFragment;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -21,17 +22,17 @@ import java.util.ArrayList;
 public class Facebook extends Social {
 
     private Session mSession;
-    private Context mContext;
+    //private Context mContext;
 
-    public Facebook(Context context) {
+    public Facebook() {
 
         mSession = Session.getActiveSession();
-        mContext = context;
+        //mContext = context;
 
     }
 
     @Override
-    public void loadFeed() {
+    public void loadFeed(final FeedListener listner) {
 
         // create some parameters for the feed request
         Bundle params = new Bundle();
@@ -68,9 +69,14 @@ public class Facebook extends Social {
                                 // create a new SocialItem to put the post details into
                                 SocialItem socialItem = new SocialItem();
 
+                                // set the network to [this] so that we have a ref to it
+                                socialItem.setNetwork(Facebook.this);
+
                                 // transfer the details from the json to the social item
                                 socialItem.setUserName(from.getString("name"));
                                 socialItem.setUserId(from.getString("id"));
+                                socialItem.setImageLink(post.getString("picture"));
+                                socialItem.setUniqueId(post.getString("object_id"));
 
                                 // add our social item to the array list
                                 items.add(socialItem);
@@ -80,7 +86,8 @@ public class Facebook extends Social {
                         }
                         catch (JSONException e) { e.printStackTrace(); }
 
-                        // pass the array list of social items to the feed fragment
+                        // pass the array list of social items to the calling fragment via the listener
+                        listner.onComplete(items);
 
                     }
 

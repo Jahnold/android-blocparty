@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.bloc.blocparty.Adapters.FeedItemAdapter;
+import com.bloc.blocparty.Models.Facebook;
 import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
@@ -23,6 +24,8 @@ public class FeedFragment extends Fragment{
 
     private ArrayList<SocialItem> mFeed;
     private FeedItemAdapter mAdapter;
+
+
 
     @Nullable
     @Override
@@ -46,6 +49,27 @@ public class FeedFragment extends Fragment{
 
         // return the view
         return v;
+
+    }
+
+    public void loadFeed() {
+
+        Facebook fb = new Facebook();
+        fb.loadFeed(new Social.FeedListener() {
+            @Override
+            public void onComplete(ArrayList<SocialItem> items) {
+
+                // add the items to the feed and update the adapter
+                addToFeed(items);
+                notifyUpdate();
+
+            }
+
+            @Override
+            public void onFailure() {
+                // do nothing as yet
+            }
+        });
 
     }
 

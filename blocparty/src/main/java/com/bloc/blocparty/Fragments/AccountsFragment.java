@@ -38,7 +38,7 @@ public class AccountsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Facebook facebook = new Facebook(getActivity());
+                Facebook facebook = new Facebook();
                 facebook.loadFeed();
             }
         });

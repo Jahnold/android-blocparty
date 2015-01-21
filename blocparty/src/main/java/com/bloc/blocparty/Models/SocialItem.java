@@ -9,22 +9,23 @@ import java.util.Date;
  */
 public class SocialItem {
 
-
-    private Bitmap mImage;
+    private String mUniqueId;
     private String mImageLink;
     private String mUserName;
+    private String mUserId;
+    private String mUserProfilePicLink;
     private String mComment;
     private boolean mLike;
-    private String mUserId;
+
     private Date mTimestamp;
-    private enum mNetwork {FACEBOOK, TWITTER, INSTAGRAM}
+    private Social mNetwork;
 
     // getters & setters
+    public String getUniqueId() { return mUniqueId; }
+    public void setUniqueId(String mUniqueId) { this.mUniqueId = mUniqueId; }
+
     public String getImageLink() { return mImageLink; }
     public void setImageLink(String imageLink) { this.mImageLink = imageLink;}
-
-    public Bitmap getImage() { return mImage; }
-    public void setImage(Bitmap mImage) { this.mImage = mImage; }
 
     public String getUserName() { return mUserName; }
     public void setUserName(String mUserName) { this.mUserName = mUserName; }
@@ -35,15 +36,25 @@ public class SocialItem {
     public boolean isLike() { return mLike; }
 
     public String getUserId() { return mUserId; }
-    public void setUserId(String mUserId) { this.mUserId = mUserId; }
+    public void setUserId(String userId) {
+
+        this.mUserId = userId;
+
+        // we can also work out the profile pic link
+        this.mUserProfilePicLink = "https://graph.facebook.com/" + userId + "/picture?type=square";
+
+    }
+    public String getUserProfilePicLink() { return mUserProfilePicLink; }
 
     public Date getTimestamp() { return mTimestamp; }
     public void setTimestamp(Date mTimestamp) { this.mTimestamp = mTimestamp; }
 
+    public void setNetwork(Social network) { this.mNetwork = network; }
+    public Social getNetwork() { return mNetwork; }
 
     public void toggleLike() {
 
-
+        this.mLike = !this.mLike;
 
     }
 
