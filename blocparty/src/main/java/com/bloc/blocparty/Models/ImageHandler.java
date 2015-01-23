@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,17 +40,23 @@ public class ImageHandler {
         // check if image is in the cache
         if (isImageInCache(id)) {
 
+            //Log.d("ImageHandler", "image is in cache");
+
             // load image from the cache and pass it to the listener
             listener.onImageLoaded(loadImageFromCache(id));
 
 
         } else {
 
+            //Log.d("ImageHandler", "image not found");
+
             // run an async a load image from the web
             new AsyncTask<Void, Void, Bitmap>() {
 
                 @Override
                 protected Bitmap doInBackground(Void... params) {
+
+                    //Log.d("ImageHandler", "doInBackground");
 
                     // load the image from the web and pass it to the onPostExecute
                     return loadImageFromWeb(url);
@@ -59,6 +66,8 @@ public class ImageHandler {
                 @Override
                 protected void onPostExecute(Bitmap bitmap) {
 
+                    //Log.d("ImageHandler", "onPostExecute");
+
                     // save the image to the cache
                     saveImageToCache(id,bitmap);
 
@@ -66,7 +75,7 @@ public class ImageHandler {
                     listener.onImageLoaded(bitmap);
 
                 }
-            };
+            }.execute();
         }
 
     }
@@ -78,6 +87,8 @@ public class ImageHandler {
      *  @param image    The bitmap image
      */
     private void saveImageToCache(String id, Bitmap image) {
+
+        //Log.d("ImageHandler", "SaveImageToCache");
 
         // check that we have access to external storage
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -114,6 +125,8 @@ public class ImageHandler {
      */
     private boolean isImageInCache(String id) {
 
+        //Log.d("ImageHandler", "isImageInCache");
+
         // check that we have access to external storage
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return false;
@@ -121,6 +134,7 @@ public class ImageHandler {
 
         // create a ref to the supposed file
         String filePath = mContext.getExternalCacheDir() + File.separator + id;
+        Log.d("ImageHandler", filePath);
         File file = new File(filePath);
 
         // return whether or not it exists
@@ -135,6 +149,8 @@ public class ImageHandler {
      *  @return Bitmap
      */
     private Bitmap loadImageFromCache(String id) {
+
+        //Log.d("ImageHandler", "loadImageFromCache");
 
         // check that we have access to external storage
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -157,6 +173,8 @@ public class ImageHandler {
      *
      */
     private Bitmap loadImageFromWeb(String imageAddress) {
+
+        //Log.d("ImageHandler", "loadImageFromWeb");
 
         Bitmap picture = null;
 

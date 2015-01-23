@@ -1,10 +1,7 @@
 package com.bloc.blocparty.Models;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.bloc.blocparty.Fragments.FeedFragment;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -22,12 +19,10 @@ import java.util.ArrayList;
 public class Facebook extends Social {
 
     private Session mSession;
-    //private Context mContext;
 
     public Facebook() {
 
         mSession = Session.getActiveSession();
-        //mContext = context;
 
     }
 
@@ -50,7 +45,6 @@ public class Facebook extends Social {
 
                         ArrayList<SocialItem> items = new ArrayList<SocialItem>();
 
-                        //gonna stick a breakpoint in here so I can see the response
                         try {
 
                             // create a JSON array from the response

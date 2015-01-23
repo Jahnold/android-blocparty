@@ -39,7 +39,7 @@ public class AccountsFragment extends Fragment {
             public void onClick(View v) {
 
                 Facebook facebook = new Facebook();
-                facebook.loadFeed();
+                //facebook.loadFeed();
             }
         });
 

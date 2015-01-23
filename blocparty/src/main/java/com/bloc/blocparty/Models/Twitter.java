@@ -6,9 +6,10 @@ package com.bloc.blocparty.Models;
 public class Twitter extends Social {
 
     @Override
-    public SocialItem[] getFeed() {
+    public void loadFeed(FeedListener listener) {
 
-        return new SocialItem[] {};
+        // tbc
+
     }
 
     @Override

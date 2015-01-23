@@ -5,10 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <com.bloc.blocparty.Views.ScaledImageView
         android:id="@+id/feed_main_image"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_margin="10dp"
+        android:layout_gravity="center_horizontal"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,32 +19,41 @@
 
         <ImageView
             android:id="@+id/feed_profile_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
             />
 
         <TextView
             android:id="@+id/feed_name"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/feed_profile_pic"
             />
 
         <TextView
             android:id="@+id/feed_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@id/feed_profile_pic"
+            android:layout_below="@id/feed_name"
             />
 
         <ImageButton
             android:id="@+id/feed_like_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/feed_popup_menu_btn"
+            android:layout_alignParentRight="true"
             />
 
         <ImageButton
             android:id="@+id/feed_popup_menu_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             />
 
         </RelativeLayout>

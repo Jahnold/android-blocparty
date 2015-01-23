@@ -6,9 +6,9 @@ package com.bloc.blocparty.Models;
 public class Instagram extends Social {
 
     @Override
-    public SocialItem[] getFeed() {
+    public void loadFeed(FeedListener listener) {
 
-        return new SocialItem[] {};
+        // tbc
 
     }
 

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 import com.bloc.blocparty.Fragments.AccountsFragment;
+import com.bloc.blocparty.Fragments.FeedFragment;
 import com.facebook.*;
 
 
@@ -42,9 +43,10 @@ public class BlocParty extends Activity {
 
         setContentView(R.layout.activity_bloc_party);
 
+        // set the feed fragment as the default view
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new AccountsFragment())        // for now just get the account login fragment working
+                    .add(R.id.container, new FeedFragment())
                     .commit();
         }
     }
@@ -67,6 +69,7 @@ public class BlocParty extends Activity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
+        //Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
     }
 
     @Override
@@ -96,10 +99,31 @@ public class BlocParty extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (id) {
+            case R.id.action_accounts:
+
+                // load the account fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new AccountsFragment())
+                        .addToBackStack(null)
+                        .commit();
+
+                return true;
+
+            case R.id.action_settings:
+
+                // do nothing for now
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
+
+
     }
 
     /**
@@ -109,5 +133,7 @@ public class BlocParty extends Activity {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 
     }
+
+
 
 }

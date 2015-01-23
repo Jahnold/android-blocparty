@@ -3,6 +3,7 @@ package com.bloc.blocparty.Fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.bloc.blocparty.Models.Facebook;
 import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
+import com.facebook.Session;
 
 import java.util.ArrayList;
 
@@ -22,10 +24,10 @@ import java.util.ArrayList;
  */
 public class FeedFragment extends Fragment{
 
-    private ArrayList<SocialItem> mFeed;
+    private ArrayList<SocialItem> mFeed = new ArrayList<>();
     private FeedItemAdapter mAdapter;
 
-
+    private String TAG = "FeedFragment";
 
     @Nullable
     @Override
@@ -36,6 +38,17 @@ public class FeedFragment extends Fragment{
 
         // get ref to the list view
         ListView feedListView = (ListView) v.findViewById(R.id.feed_list);
+
+        // get facebook
+        Session fb = Session.getActiveSession();
+
+        // if we have a facebook connection then load the feed
+        if (fb.getState().isOpened()) {
+
+            Log.d(TAG, "FacebookOpen");
+            loadFacebookFeed();
+
+        }
 
         // set up the feed item adapter
         mAdapter = new FeedItemAdapter(
@@ -52,7 +65,7 @@ public class FeedFragment extends Fragment{
 
     }
 
-    public void loadFeed() {
+    public void loadFacebookFeed() {
 
         Facebook fb = new Facebook();
         fb.loadFeed(new Social.FeedListener() {
