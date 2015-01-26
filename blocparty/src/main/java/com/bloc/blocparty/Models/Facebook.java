@@ -69,8 +69,11 @@ public class Facebook extends Social {
                                 // transfer the details from the json to the social item
                                 socialItem.setUserName(from.getString("name"));
                                 socialItem.setUserId(from.getString("id"));
-                                socialItem.setImageLink(post.getString("picture"));
+                                socialItem.setImageLink("https://graph.facebook.com/" + post.getString("object_id") + "/picture");
                                 socialItem.setUniqueId(post.getString("object_id"));
+
+                                // work out whether the logged in user has liked this post
+
 
                                 // add our social item to the array list
                                 items.add(socialItem);

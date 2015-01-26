@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,12 +18,20 @@ import com.bloc.blocparty.Fragments.AccountsFragment;
 import com.bloc.blocparty.Fragments.FeedFragment;
 import com.facebook.*;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.*;
+import twitter4j.auth.AccessToken;
 
 
 public class BlocParty extends Activity {
 
     // keep track of the resumed state of the app
     private boolean isResumed = false;
+
+    private static final String PREF_NAME = "";
+
 
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -42,6 +52,9 @@ public class BlocParty extends Activity {
         uiHelper.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_bloc_party);
+
+        // For Twitter
+        checkTwitterCallback();
 
         // set the feed fragment as the default view
         if (savedInstanceState == null) {
@@ -131,6 +144,50 @@ public class BlocParty extends Activity {
      *
      */
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+
+    }
+
+    private void checkTwitterCallback() {
+
+        Uri uri = getIntent().getData();
+        String verifier = "";
+        if (uri != null && uri.toString().startsWith(getString(R.string.twitter_callback_url))) {
+
+            verifier = uri.getQueryParameter("oauth_verifier");
+
+        }
+
+        new AsyncTask<String,Void,AccessToken>() {
+
+            @Override
+            protected AccessToken doInBackground(String... params) {
+
+                String verifier = params[0];
+                Twitter twitter = TwitterFactory.getSingleton();
+                AccessToken accessToken = null;
+
+                try {
+
+                    RequestToken requestToken = twitter.getOAuthRequestToken(getString(R.string.twitter_callback_url));
+
+                    if (verifier != null && !verifier.equals("")) {
+                        accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
+                    }
+
+                }
+                catch (TwitterException e) { e.printStackTrace(); }
+
+
+                return accessToken;
+            }
+
+            @Override
+            protected void onPostExecute(AccessToken accessToken) {
+
+                super.onPostExecute(accessToken);
+            }
+        }.execute(verifier);
+
 
     }
 
