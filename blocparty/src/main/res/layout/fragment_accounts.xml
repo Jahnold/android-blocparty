@@ -14,20 +14,14 @@
         android:layout_marginTop="30dp"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/txt_fb_logged_in"
-        android:visibility="gone"
-        />
-
-    <Button
-        android:id="@+id/btn_login_twitter"
-        android:text="@string/twitter_btn_login"
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twitter_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         />
+
+
 
 </LinearLayout>

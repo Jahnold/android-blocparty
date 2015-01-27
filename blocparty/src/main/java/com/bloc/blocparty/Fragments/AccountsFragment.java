@@ -2,26 +2,23 @@ package com.bloc.blocparty.Fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.bloc.blocparty.R;
+
 import com.facebook.widget.LoginButton;
 
-import java.util.Arrays;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.RequestToken;
+import java.util.Arrays;
 
 /**
  * Fragment which handles the logging in to any/all accounts
@@ -29,6 +26,7 @@ import twitter4j.auth.RequestToken;
 public class AccountsFragment extends Fragment {
 
     private static final String PREF_TWITTER_IS_LOGGED_IN = "com.bloc.blocparty.pref_twitter_logged_in";
+    private TwitterLoginButton loginButton;
 
     @Nullable
     @Override
@@ -55,29 +53,16 @@ public class AccountsFragment extends Fragment {
         *
         ~~~~~~~~~~~~*/
 
-        // get a ref to the Twitter button
-        Button twitter = (Button) view.findViewById(R.id.btn_login_twitter);
-
-        // set a click listener
-        twitter.setOnClickListener(new View.OnClickListener() {
+        loginButton = (TwitterLoginButton) view.findViewById(R.id.twitter_login_button);
+        loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
-            public void onClick(View v) {
+            public void success(Result<TwitterSession> result) {
+                // Do something with result, which provides a TwitterSession for making API calls
+            }
 
-                // first check if we're already logged into twitter by checking the shared prefs
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                if (!sharedPreferences.getBoolean(PREF_TWITTER_IS_LOGGED_IN, false)) {
-
-                    // not already logged in, run the twitter login async task
-                    new TwitterAuthenticateTask().execute();
-
-                }
-                else {
-
-                    // already logged in - log out
-
-                }
-
-
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
             }
         });
 
@@ -85,33 +70,13 @@ public class AccountsFragment extends Fragment {
 
     }
 
-    class TwitterAuthenticateTask extends AsyncTask<String, String, RequestToken> {
-
-        @Override
-        protected RequestToken doInBackground(String... params) {
-
-            Twitter twitter = TwitterFactory.getSingleton();
-            twitter.setOAuthConsumer(getString(R.string.twitter_key),getString(R.string.twitter_secret));
-
-            RequestToken requestToken = null;
-
-            try {
-                requestToken = twitter.getOAuthRequestToken(getString(R.string.twitter_callback_url));
-            }
-            catch (TwitterException e) { e.printStackTrace(); }
-
-            return requestToken;
-
-        }
-
-        @Override
-        protected void onPostExecute(RequestToken requestToken) {
-
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(requestToken.getAuthenticationURL()));
-            startActivity(intent);
-
-        }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        loginButton.onActivityResult(requestCode, resultCode, data);
     }
+
+
 
 
 }

@@ -20,6 +20,22 @@ public class SocialItem {
     private Date mTimestamp;
     private Social mNetwork;
 
+    public SocialItem() {}
+
+    public SocialItem(String uniqueId, String userId, String userName, String comment, Date timestamp, boolean isLiked, String profilePicLink, String imageLink, Social network) {
+
+        mUniqueId = uniqueId;
+        mImageLink = imageLink;
+        mUserId = userId;
+        mUserName = userName;
+        mUserProfilePicLink = profilePicLink;
+        mComment = comment;
+        mTimestamp = timestamp;
+        mLike = isLiked;
+        mNetwork = network;
+
+    }
+
     // getters & setters
     public String getUniqueId() { return mUniqueId; }
     public void setUniqueId(String mUniqueId) { this.mUniqueId = mUniqueId; }

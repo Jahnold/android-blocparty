@@ -1,36 +1,31 @@
 package com.bloc.blocparty;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 import com.bloc.blocparty.Fragments.AccountsFragment;
 import com.bloc.blocparty.Fragments.FeedFragment;
 import com.facebook.*;
 
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.*;
-import twitter4j.auth.AccessToken;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import io.fabric.sdk.android.Fabric;
+
 
 
 public class BlocParty extends Activity {
 
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "AQmWwEByzqiVLCPQD7uGdCzft";
+    private static final String TWITTER_SECRET = "TAEh29REDU8NUMoaM8bicT0CBKfPIuXQkTqqf9RUaVjaJmYmyg";
+
     // keep track of the resumed state of the app
     private boolean isResumed = false;
-
-    private static final String PREF_NAME = "";
 
 
     private UiLifecycleHelper uiHelper;
@@ -46,15 +41,14 @@ public class BlocParty extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
 
         // For Facebook
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_bloc_party);
-
-        // For Twitter
-        checkTwitterCallback();
 
         // set the feed fragment as the default view
         if (savedInstanceState == null) {
@@ -81,8 +75,14 @@ public class BlocParty extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //fb
         uiHelper.onActivityResult(requestCode, resultCode, data);
-        //Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
+        //twitter
+        TwitterLoginButton loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
+        loginButton.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
@@ -147,49 +147,7 @@ public class BlocParty extends Activity {
 
     }
 
-    private void checkTwitterCallback() {
 
-        Uri uri = getIntent().getData();
-        String verifier = "";
-        if (uri != null && uri.toString().startsWith(getString(R.string.twitter_callback_url))) {
-
-            verifier = uri.getQueryParameter("oauth_verifier");
-
-        }
-
-        new AsyncTask<String,Void,AccessToken>() {
-
-            @Override
-            protected AccessToken doInBackground(String... params) {
-
-                String verifier = params[0];
-                Twitter twitter = TwitterFactory.getSingleton();
-                AccessToken accessToken = null;
-
-                try {
-
-                    RequestToken requestToken = twitter.getOAuthRequestToken(getString(R.string.twitter_callback_url));
-
-                    if (verifier != null && !verifier.equals("")) {
-                        accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-                    }
-
-                }
-                catch (TwitterException e) { e.printStackTrace(); }
-
-
-                return accessToken;
-            }
-
-            @Override
-            protected void onPostExecute(AccessToken accessToken) {
-
-                super.onPostExecute(accessToken);
-            }
-        }.execute(verifier);
-
-
-    }
 
 
 
