@@ -52,14 +52,8 @@ public class SocialItem {
     public boolean isLike() { return mLike; }
 
     public String getUserId() { return mUserId; }
-    public void setUserId(String userId) {
+    public void setUserId(String userId) { this.mUserId = userId; }
 
-        this.mUserId = userId;
-
-        // we can also work out the profile pic link
-        this.mUserProfilePicLink = "https://graph.facebook.com/" + userId + "/picture?type=square";
-
-    }
     public String getUserProfilePicLink() { return mUserProfilePicLink; }
 
     public Date getTimestamp() { return mTimestamp; }

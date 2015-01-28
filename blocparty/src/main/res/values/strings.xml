@@ -13,4 +13,8 @@
 
     <string name="twitter_btn_login">Log In With Twitter</string>
     <string name="twitter_btn_logout">Log Out of Twitter</string>
+
+    <string name="menu_save">Save Image</string>
+    <string name="menu_share">Share Image</string>
+    <string name="menu_collection">Add To Collection</string>
 </resources>

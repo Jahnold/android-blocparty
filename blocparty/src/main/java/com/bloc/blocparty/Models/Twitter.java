@@ -6,17 +6,19 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  *  Handle all twitter interactions
  */
 public class Twitter extends Social {
+
+    public Twitter() {
+
+        dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+    }
 
     @Override
     public void loadFeed(final FeedListener listener) {
@@ -85,18 +87,4 @@ public class Twitter extends Social {
         return false;
     }
 
-    private Date convertDate(String dateString) {
-
-        final String TWITTER="EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-
-        SimpleDateFormat sf = new SimpleDateFormat(TWITTER, Locale.ENGLISH);
-        sf.setLenient(true);
-        Date returnDate = null;
-        try {
-            returnDate = sf.parse(dateString);
-        }
-        catch (Exception e) { e.printStackTrace();}
-
-        return returnDate;
-    }
 }

@@ -16,6 +16,7 @@ import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterSession;
 
@@ -44,13 +45,21 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
         // get facebook
         Session fbSession = Session.getActiveSession();
 
-        // if we have a facebook connection then load the feed
-        if (fbSession.getState().isOpened()) {
+        final FeedFragment feedFragment = this;
 
-            Facebook fb = new Facebook();
-            fb.loadFeed(this);
+        // add a callback so that when the session is opened we load the feed
+        fbSession.addCallback(new Session.StatusCallback() {
+            @Override
+            public void call(Session session, SessionState state, Exception e) {
+                if (state.isOpened()) {
 
-        }
+                    Facebook fb = new Facebook();
+                    fb.loadFeed(feedFragment);
+
+                }
+            }
+        });
+
 
         // get twitter
         TwitterSession twitterSession = Twitter.getSessionManager().getActiveSession();
@@ -87,7 +96,8 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
     public void addToFeed(ArrayList<SocialItem> newItems) {
 
-        mFeed.addAll(newItems);
+        //mFeed.addAll(newItems);
+        mAdapter.addAll(newItems);
 
     }
 
@@ -101,7 +111,7 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
         // add the items to the feed and update the adapter
         addToFeed(items);
-        notifyUpdate();
+        //notifyUpdate();
 
     }
 
