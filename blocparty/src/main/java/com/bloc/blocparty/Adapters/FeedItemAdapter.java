@@ -3,11 +3,14 @@ package com.bloc.blocparty.Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bloc.blocparty.Models.ImageHandler;
@@ -89,6 +92,39 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
             // set up the like button
 
             // set up the popup menu
+            menuBtn.setFocusable(false);
+            final PopupMenu popupMenu = new PopupMenu(getContext(), menuBtn);
+            popupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, getContext().getString(R.string.menu_save));
+            popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, getContext().getString(R.string.menu_share));
+            popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, getContext().getString(R.string.menu_collection));
+
+            // set up the listener for the menu items
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()) {
+                        case 0:
+                            // save image
+                            break;
+                        case 1:
+                            // share image
+                            break;
+                        case 2:
+                            // add user to collection
+                            break;
+                    }
+                    return false;
+                }
+            });
+
+            // set up a listener for the actual menu button
+            menuBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupMenu.show();;
+                }
+            });
 
         }
 
