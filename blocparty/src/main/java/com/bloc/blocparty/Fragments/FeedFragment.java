@@ -16,13 +16,15 @@ import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
 import com.facebook.Session;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.ArrayList;
 
 /**
  * The Fragment which displays the feed
  */
-public class FeedFragment extends Fragment{
+public class FeedFragment extends Fragment implements Social.FeedListener{
 
     private ArrayList<SocialItem> mFeed = new ArrayList<>();
     private FeedItemAdapter mAdapter;
@@ -40,13 +42,24 @@ public class FeedFragment extends Fragment{
         ListView feedListView = (ListView) v.findViewById(R.id.feed_list);
 
         // get facebook
-        Session fb = Session.getActiveSession();
+        Session fbSession = Session.getActiveSession();
 
         // if we have a facebook connection then load the feed
-        if (fb.getState().isOpened()) {
+        if (fbSession.getState().isOpened()) {
 
-            Log.d(TAG, "FacebookOpen");
-            loadFacebookFeed();
+            Facebook fb = new Facebook();
+            fb.loadFeed(this);
+
+        }
+
+        // get twitter
+        TwitterSession twitterSession = Twitter.getSessionManager().getActiveSession();
+
+        // if we have an open twitter session then load the feed
+        if (twitterSession != null) {
+
+            com.bloc.blocparty.Models.Twitter twitter = new com.bloc.blocparty.Models.Twitter();
+            twitter.loadFeed(this);
 
         }
 
@@ -65,26 +78,6 @@ public class FeedFragment extends Fragment{
 
     }
 
-    public void loadFacebookFeed() {
-
-        Facebook fb = new Facebook();
-        fb.loadFeed(new Social.FeedListener() {
-            @Override
-            public void onComplete(ArrayList<SocialItem> items) {
-
-                // add the items to the feed and update the adapter
-                addToFeed(items);
-                notifyUpdate();
-
-            }
-
-            @Override
-            public void onFailure() {
-                // do nothing as yet
-            }
-        });
-
-    }
 
     public void clearFeed() {
 
@@ -101,6 +94,18 @@ public class FeedFragment extends Fragment{
     public void notifyUpdate() {
 
         mAdapter.notifyDataSetChanged();
+
+    }
+
+    public void onFeedLoaded(ArrayList<SocialItem> items) {
+
+        // add the items to the feed and update the adapter
+        addToFeed(items);
+        notifyUpdate();
+
+    }
+
+    public void onFeedLoadFailure() {
 
     }
 }

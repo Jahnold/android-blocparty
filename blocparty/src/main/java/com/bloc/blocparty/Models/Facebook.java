@@ -84,7 +84,7 @@ public class Facebook extends Social {
                         catch (JSONException e) { e.printStackTrace(); }
 
                         // pass the array list of social items to the calling fragment via the listener
-                        listner.onComplete(items);
+                        listner.onFeedLoaded(items);
 
                     }
 

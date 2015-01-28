@@ -25,7 +25,7 @@ public class Twitter extends Social {
         StatusesService service = com.twitter.sdk.android.Twitter.getApiClient().getStatusesService();
 
         service.homeTimeline(
-                10,                     // tweet count
+                30,                     // tweet count
                 null,                   // since_id
                 null,                   // max_id
                 false,                  // trim user
@@ -44,7 +44,7 @@ public class Twitter extends Social {
                             Tweet tweet = (Tweet) iterator.next();
 
                             // we're only interested in tweets with 'media
-                            if (tweet.entities.media.size() > 0) {
+                            if (tweet.entities.media != null) {
 
                                 // create a new social item from the tweet
                                 SocialItem socialItem = new SocialItem(
@@ -66,7 +66,7 @@ public class Twitter extends Social {
 
                         }
 
-                        listener.onComplete(items);
+                        listener.onFeedLoaded(items);
 
                     }
 

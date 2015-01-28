@@ -57,7 +57,12 @@ public class AccountsFragment extends Fragment {
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                // Do something with result, which provides a TwitterSession for making API calls
+
+                //TODO
+                // because the twitter button doesn't automatically change to 'log out'
+                // I'll have to implement a change here
+
+
             }
 
             @Override

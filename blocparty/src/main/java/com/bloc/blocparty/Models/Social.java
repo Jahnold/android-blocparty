@@ -11,8 +11,8 @@ public abstract class Social {
 
     public interface FeedListener {
 
-        void onComplete(ArrayList<SocialItem> items);
-        void onFailure();
+        void onFeedLoaded(ArrayList<SocialItem> items);
+        void onFeedLoadFailure();
 
     }
 

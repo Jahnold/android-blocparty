@@ -1,6 +1,7 @@
 package com.bloc.blocparty;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -80,8 +81,11 @@ public class BlocParty extends Activity {
         uiHelper.onActivityResult(requestCode, resultCode, data);
 
         //twitter
-        TwitterLoginButton loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
-        loginButton.onActivityResult(requestCode, resultCode, data);
+        Fragment accountFragement = getFragmentManager().findFragmentByTag("AccountsFragment");
+        if (accountFragement != null) {
+            accountFragement.onActivityResult(requestCode, resultCode, data);
+        }
+
 
     }
 
@@ -119,7 +123,7 @@ public class BlocParty extends Activity {
                 // load the account fragment
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.container, new AccountsFragment())
+                        .replace(R.id.container, new AccountsFragment(),"AccountsFragment")
                         .addToBackStack(null)
                         .commit();
 
