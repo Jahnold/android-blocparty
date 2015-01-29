@@ -11,7 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.bloc.blocparty.Adapters.FeedItemAdapter;
+import com.bloc.blocparty.Instagram.InstagramSession;
 import com.bloc.blocparty.Models.Facebook;
+import com.bloc.blocparty.Models.Instagram;
 import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
@@ -69,6 +71,17 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
             com.bloc.blocparty.Models.Twitter twitter = new com.bloc.blocparty.Models.Twitter();
             twitter.loadFeed(this);
+
+        }
+
+        // get instagram
+        InstagramSession instagramSession = new InstagramSession(getActivity());
+
+        // if we have an active instagram session, load the feed
+        if (instagramSession.getAccessToken() != null) {
+
+            Instagram instagram = new Instagram(getActivity());
+            instagram.loadFeed(this);
 
         }
 

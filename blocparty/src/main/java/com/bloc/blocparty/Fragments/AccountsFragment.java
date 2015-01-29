@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.bloc.blocparty.Instagram.InstagramApp;
 import com.bloc.blocparty.R;
 
 import com.facebook.widget.LoginButton;
@@ -68,6 +70,48 @@ public class AccountsFragment extends Fragment {
             @Override
             public void failure(TwitterException exception) {
                 // Do something on failure
+            }
+        });
+
+        /*~~~~~~~~~~~
+        *
+        *   Instagram
+        *
+        ~~~~~~~~~~~~*/
+
+        final Button ig = (Button) view.findViewById(R.id.btn_login_instagram);
+
+        ig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // create a new instagram session
+                InstagramApp instagram = new InstagramApp(
+                        getActivity(),
+                        getString(R.string.instagram_id),
+                        getString(R.string.instagram_secret),
+                        getString(R.string.instagram_uri)
+                        );
+
+                // set a listener for once authorisation is complete
+                instagram.setListener(new InstagramApp.OAuthAuthenticationListener() {
+                    @Override
+                    public void onSuccess() {
+
+                        // change the button to 'log out'
+                        ig.setText(getString(R.string.instagram_btn_logout));
+
+                    }
+
+                    @Override
+                    public void onFail(String error) {
+
+                    }
+                });
+
+                // run the oAuth process
+                instagram.authorize();
+
             }
         });
 

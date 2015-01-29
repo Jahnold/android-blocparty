@@ -6,6 +6,9 @@
     <string name="twitter_key">LwF9hhbHdIrmSYNAkp5AWvkTX</string>
     <string name="twitter_secret">oJ9kvzI3s2GMfblYvzTj6wGeimuW1O3gVDl5apJf5GDdERqqW1</string>
     <string name="twitter_callback_url">oauth://com.bloc.blocparty.Twitter_oAuth</string>
+    <string name="instagram_id">b2f8ee09adaf466e803d9785f85f81ba</string>
+    <string name="instagram_secret">54b411db1acd4851a6ef297476f90853</string>
+    <string name="instagram_uri">instagram://connect</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_accounts">Accounts</string>
@@ -13,6 +16,9 @@
 
     <string name="twitter_btn_login">Log In With Twitter</string>
     <string name="twitter_btn_logout">Log Out of Twitter</string>
+
+    <string name="instagram_btn_login">Log In With Instagram</string>
+    <string name="instagram_btn_logout">Log Out of Instagram</string>
 
     <string name="menu_save">Save Image</string>
     <string name="menu_share">Share Image</string>

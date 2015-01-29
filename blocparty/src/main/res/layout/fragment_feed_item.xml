@@ -43,6 +43,7 @@
 
         <ImageButton
             android:id="@+id/feed_like_btn"
+            android:background="@android:drawable/btn_star_big_off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/feed_popup_menu_btn"

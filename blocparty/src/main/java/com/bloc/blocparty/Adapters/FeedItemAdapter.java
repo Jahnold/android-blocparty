@@ -49,7 +49,7 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
         }
 
         // get the SocialItem at [position] from the array list
-        SocialItem item = mFeed.get(position);
+        final SocialItem item = mFeed.get(position);
 
         // get refs to the interface controls
         final ImageView profilePic = (ImageView) convertView.findViewById(R.id.feed_profile_pic);
@@ -89,7 +89,22 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                     }
             );
 
-            // set up the like button
+            // set the like button picture depending on whether the item is liked or not
+            if (item.isLike()) {
+                likeBtn.setBackgroundResource(android.R.drawable.btn_star_big_on);
+            }
+            else {
+                likeBtn.setBackgroundResource(android.R.drawable.btn_star_big_off);
+            }
+
+            // set up a listener for the like button
+            likeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    item.toggleLike();
+                }
+            });
 
             // set up the popup menu
             menuBtn.setFocusable(false);

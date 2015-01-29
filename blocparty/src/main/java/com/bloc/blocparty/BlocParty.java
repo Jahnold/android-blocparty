@@ -1,5 +1,6 @@
 package com.bloc.blocparty;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -54,7 +55,7 @@ public class BlocParty extends Activity {
         // set the feed fragment as the default view
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new FeedFragment())
+                    .add(R.id.container, new FeedFragment(), "FeedFragment")
                     .commit();
         }
     }
@@ -118,6 +119,16 @@ public class BlocParty extends Activity {
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.home:
+
+                // go back to the feed fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, getFragmentManager().findFragmentByTag("FeedFragment"))
+                        .commit();
+
+                getActionBar().setDisplayHomeAsUpEnabled(false);
+
             case R.id.action_accounts:
 
                 // load the account fragment
@@ -126,6 +137,9 @@ public class BlocParty extends Activity {
                         .replace(R.id.container, new AccountsFragment(),"AccountsFragment")
                         .addToBackStack(null)
                         .commit();
+
+                // set the actionbar to back
+                getActionBar().setDisplayHomeAsUpEnabled(true);
 
                 return true;
 
