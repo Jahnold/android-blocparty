@@ -1,7 +1,9 @@
 package com.bloc.blocparty.Adapters;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.bloc.blocparty.BlocParty;
+import com.bloc.blocparty.Fragments.PhotoViewFragment;
 import com.bloc.blocparty.Models.ImageHandler;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
@@ -20,13 +24,15 @@ import com.bloc.blocparty.R;
 import java.util.ArrayList;
 
 /**
- * Created by matthewarnold on 16/01/15.
+ * Adapter responsible for building the individual feed items for the Feed Fragment
  */
 public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
 
     // working copy of the feed
     private ArrayList<SocialItem> mFeed;
     private ImageHandler mImageHandler;
+    private PhotoViewFragment mPhotoViewFragment;
+    private Bitmap mImage;
 
     // constructor
     public FeedItemAdapter(Context context, int textViewResourceId, ArrayList<SocialItem> items) {
@@ -34,6 +40,7 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
         super(context, textViewResourceId, items);
         this.mFeed = items;
         this.mImageHandler = new ImageHandler(context);
+        mPhotoViewFragment = new PhotoViewFragment();
 
     }
 
@@ -85,6 +92,9 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                         @Override
                         public void onImageLoaded(Bitmap image) {
                             mainImage.setImageBitmap(image);
+
+                            // grab the image to use in the click handler
+                            mImage = image;
                         }
                     }
             );
@@ -138,6 +148,25 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                 @Override
                 public void onClick(View v) {
                     popupMenu.show();;
+                }
+            });
+
+            // set up a listener for when the user clicks on the image
+            mainImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    // pass the image to the photo view fragment
+                    Bitmap image = ((BitmapDrawable) mainImage.getDrawable()).getBitmap();
+                    mPhotoViewFragment.setImage(image);
+
+                    // show the photo view fragment
+                    FragmentManager fm = ((BlocParty)getContext()).getFragmentManager();
+                    fm.beginTransaction()
+                            .replace(R.id.container,mPhotoViewFragment)
+                            .addToBackStack(null)
+                            .commit();
+
                 }
             });
 

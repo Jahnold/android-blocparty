@@ -34,6 +34,8 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
     private String TAG = "FeedFragment";
 
+    public FeedFragment() {}
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
