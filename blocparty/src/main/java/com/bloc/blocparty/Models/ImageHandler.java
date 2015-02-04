@@ -1,11 +1,18 @@
 package com.bloc.blocparty.Models;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.bloc.blocparty.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -134,7 +142,7 @@ public class ImageHandler {
 
         // create a ref to the supposed file
         String filePath = mContext.getExternalCacheDir() + File.separator + id;
-        Log.d("ImageHandler", filePath);
+
         File file = new File(filePath);
 
         // return whether or not it exists
@@ -200,4 +208,35 @@ public class ImageHandler {
         return picture;
     }
 
+    /**
+     *  Saves the image with the id [id] to the phone gallery
+     *
+     */
+    public void saveImageToGallery(String id) {
+
+        MediaStore.Images.Media.insertImage(mContext.getContentResolver(),loadImageFromCache(id),null,null);
+        Toast.makeText(mContext, R.string.toast_image_saved,Toast.LENGTH_SHORT).show();
+
+    }
+
+    /**
+     *  Creates a share intent for the image [id]
+     *
+     */
+    public void shareImage(String id) {
+
+        // put image in media store and get the its path
+        String filePath = MediaStore.Images.Media.insertImage(mContext.getContentResolver(),loadImageFromCache(id),null,null);
+        // turn that into a uri
+        Uri imageUri = Uri.parse(filePath);
+
+        // create an intent to share the image
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/png");
+        intent.putExtra(Intent.EXTRA_STREAM, imageUri);
+
+        // start the intent
+        mContext.startActivity(intent);
+
+    }
 }

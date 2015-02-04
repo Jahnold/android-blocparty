@@ -32,7 +32,6 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
     private ArrayList<SocialItem> mFeed;
     private ImageHandler mImageHandler;
     private PhotoViewFragment mPhotoViewFragment;
-    private Bitmap mImage;
 
     // constructor
     public FeedItemAdapter(Context context, int textViewResourceId, ArrayList<SocialItem> items) {
@@ -93,8 +92,6 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                         public void onImageLoaded(Bitmap image) {
                             mainImage.setImageBitmap(image);
 
-                            // grab the image to use in the click handler
-                            mImage = image;
                         }
                     }
             );
@@ -126,14 +123,16 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
             // set up the listener for the menu items
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
-                public boolean onMenuItemClick(MenuItem item) {
+                public boolean onMenuItemClick(MenuItem menuItem) {
 
-                    switch (item.getItemId()) {
+                    switch (menuItem.getItemId()) {
                         case 0:
                             // save image
+                            mImageHandler.saveImageToGallery(item.getUniqueId());
                             break;
                         case 1:
                             // share image
+                            mImageHandler.shareImage(item.getUniqueId());
                             break;
                         case 2:
                             // add user to collection
@@ -156,16 +155,35 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                 @Override
                 public void onClick(View v) {
 
-                    // pass the image to the photo view fragment
-                    Bitmap image = ((BitmapDrawable) mainImage.getDrawable()).getBitmap();
-                    mPhotoViewFragment.setImage(image);
+                    mImageHandler.loadImage(
+                            item.getUniqueId(),
+                            item.getImageLink(),
+                            new ImageHandler.ImageHandlerListener() {
+                                @Override
+                                public void onImageLoaded(Bitmap image) {
 
-                    // show the photo view fragment
-                    FragmentManager fm = ((BlocParty)getContext()).getFragmentManager();
-                    fm.beginTransaction()
-                            .replace(R.id.container,mPhotoViewFragment)
-                            .addToBackStack(null)
-                            .commit();
+                                    mPhotoViewFragment.setImage(image);
+
+                                    // show the photo view fragment
+                                    FragmentManager fm = ((BlocParty)getContext()).getFragmentManager();
+                                    fm.beginTransaction()
+                                            .replace(R.id.container,mPhotoViewFragment)
+                                            .addToBackStack(null)
+                                            .commit();
+                                }
+                            }
+                    );
+
+//                    // pass the image to the photo view fragment
+//                    Bitmap image = ((BitmapDrawable) mainImage.getDrawable()).getBitmap();
+//                    mPhotoViewFragment.setImage(image);
+//
+//                    // show the photo view fragment
+//                    FragmentManager fm = ((BlocParty)getContext()).getFragmentManager();
+//                    fm.beginTransaction()
+//                            .replace(R.id.container,mPhotoViewFragment)
+//                            .addToBackStack(null)
+//                            .commit();
 
                 }
             });

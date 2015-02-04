@@ -23,4 +23,6 @@
     <string name="menu_save">Save Image</string>
     <string name="menu_share">Share Image</string>
     <string name="menu_collection">Add To Collection</string>
+
+    <string name="toast_image_saved">Image Saved To Gallery</string>
 </resources>
