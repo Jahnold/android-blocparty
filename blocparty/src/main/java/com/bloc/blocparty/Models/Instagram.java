@@ -5,6 +5,14 @@ import android.os.AsyncTask;
 
 import com.bloc.blocparty.Instagram.InstagramSession;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,9 +22,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *  Handle Instagram Interaction
@@ -62,7 +72,7 @@ public class Instagram extends Social {
                 @Override
                 protected void onPostExecute(String response) {
 
-                    ArrayList<SocialItem> items = new ArrayList<SocialItem>();
+                    ArrayList<SocialItem> items = new ArrayList<>();
 
                     try {
 
@@ -106,7 +116,54 @@ public class Instagram extends Social {
     }
 
     @Override
-    public void likeItem(SocialItem item, LikeListener listener) {
+    public void likeItem(final SocialItem item, final LikeListener listener) {
+
+        if (mSession.getAccessToken() != null) {
+
+            new AsyncTask<Void,Void,String>() {
+
+                @Override
+                protected String doInBackground(Void... params) {
+
+                    String response = "";
+
+                    HttpClient httpclient = new DefaultHttpClient();
+                    HttpPost httppost = new HttpPost("https://api.instagram.com/v1/media/" + item.getUniqueId() + "/likes");
+
+                    try {
+
+                        // create a nvp for the access token
+                        List<NameValuePair> nameValuePairs = new ArrayList<>(1);
+                        nameValuePairs.add(new BasicNameValuePair("access_token", mSession.getAccessToken()));
+                        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                        // get a response
+                        HttpResponse httpResponse = httpclient.execute(httppost);
+                        response = String.valueOf(httpResponse.getStatusLine().getStatusCode());
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    return response;
+
+                }
+
+
+                @Override
+                protected void onPostExecute(String response) {
+
+                    if (response.equals("200")) {
+
+                        listener.onLikeSuccess();
+
+                    }
+
+                }
+
+            }.execute();
+
+        }
 
     }
 
