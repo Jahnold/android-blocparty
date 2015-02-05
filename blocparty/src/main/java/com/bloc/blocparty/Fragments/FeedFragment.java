@@ -57,7 +57,7 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
             public void call(Session session, SessionState state, Exception e) {
                 if (state.isOpened()) {
 
-                    Facebook fb = new Facebook();
+                    Facebook fb = new Facebook(getActivity());
                     fb.loadFeed(feedFragment);
 
                 }

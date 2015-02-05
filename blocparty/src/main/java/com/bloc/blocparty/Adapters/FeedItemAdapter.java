@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bloc.blocparty.BlocParty;
 import com.bloc.blocparty.Fragments.PhotoViewFragment;
 import com.bloc.blocparty.Models.ImageHandler;
+import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
 import com.bloc.blocparty.R;
 
@@ -62,7 +63,7 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
         final ImageView mainImage = (ImageView) convertView.findViewById(R.id.feed_main_image);
         TextView name = (TextView) convertView.findViewById(R.id.feed_name);
         TextView comment = (TextView) convertView.findViewById(R.id.feed_comment);
-        ImageButton likeBtn = (ImageButton) convertView.findViewById(R.id.feed_like_btn);
+        final ImageButton likeBtn = (ImageButton) convertView.findViewById(R.id.feed_like_btn);
         ImageButton menuBtn = (ImageButton) convertView.findViewById(R.id.feed_popup_menu_btn);
 
         if (item != null) {
@@ -109,7 +110,17 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                 @Override
                 public void onClick(View v) {
 
-                    item.toggleLike();
+                    item.getNetwork().likeItem(item, new Social.LikeListener() {
+                        @Override
+                        public void onLikeSuccess() {
+
+                            // change the like button to show the like
+                            likeBtn.setBackgroundResource(android.R.drawable.btn_star_big_on);
+
+                            // update the item
+                            item.setLike(true);
+                        }
+                    });
                 }
             });
 
@@ -146,7 +157,7 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
             menuBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popupMenu.show();;
+                    popupMenu.show();
                 }
             });
 
@@ -174,16 +185,6 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                             }
                     );
 
-//                    // pass the image to the photo view fragment
-//                    Bitmap image = ((BitmapDrawable) mainImage.getDrawable()).getBitmap();
-//                    mPhotoViewFragment.setImage(image);
-//
-//                    // show the photo view fragment
-//                    FragmentManager fm = ((BlocParty)getContext()).getFragmentManager();
-//                    fm.beginTransaction()
-//                            .replace(R.id.container,mPhotoViewFragment)
-//                            .addToBackStack(null)
-//                            .commit();
 
                 }
             });

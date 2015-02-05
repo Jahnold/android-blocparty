@@ -50,6 +50,7 @@ public class SocialItem {
     public void setComment(String mComment) {  this.mComment = mComment; }
 
     public boolean isLike() { return mLike; }
+    public void setLike(boolean like) { mLike = like; }
 
     public String getUserId() { return mUserId; }
     public void setUserId(String userId) { this.mUserId = userId; }
@@ -62,10 +63,5 @@ public class SocialItem {
     public void setNetwork(Social network) { this.mNetwork = network; }
     public Social getNetwork() { return mNetwork; }
 
-    public void toggleLike() {
-
-        this.mLike = !this.mLike;
-
-    }
 
 }

@@ -106,8 +106,8 @@ public class Instagram extends Social {
     }
 
     @Override
-    public boolean likeItem(SocialItem item) {
-        return false;
+    public void likeItem(SocialItem item, LikeListener listener) {
+
     }
 
     // nabbed from the InstagramApp class

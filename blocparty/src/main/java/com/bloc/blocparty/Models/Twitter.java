@@ -2,8 +2,10 @@ package com.bloc.blocparty.Models;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.util.ArrayList;
@@ -15,15 +17,16 @@ import java.util.List;
  */
 public class Twitter extends Social {
 
+
     public Twitter() {
 
         dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+
     }
 
     @Override
     public void loadFeed(final FeedListener listener) {
 
-        // get a ref to the twitter api service
         StatusesService service = com.twitter.sdk.android.Twitter.getApiClient().getStatusesService();
 
         service.homeTimeline(
@@ -83,8 +86,29 @@ public class Twitter extends Social {
     }
 
     @Override
-    public boolean likeItem(SocialItem item) {
-        return false;
+    public void likeItem(SocialItem item, final LikeListener listener) {
+
+
+        FavoriteService service =  com.twitter.sdk.android.Twitter.getApiClient().getFavoriteService();
+
+        service.create(
+                Long.valueOf(item.getUniqueId()),
+                false,
+                new Callback<Tweet>() {
+                    @Override
+                    public void success(Result<Tweet> tweetResult) {
+
+                        listener.onLikeSuccess();
+
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                }
+        );
+
     }
 
 }

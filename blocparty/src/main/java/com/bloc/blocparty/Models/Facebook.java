@@ -1,5 +1,7 @@
 package com.bloc.blocparty.Models;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,8 +16,10 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -24,14 +28,18 @@ import java.util.Locale;
 public class Facebook extends Social {
 
     private Session mSession;
+    private Context mContext;
 
-    public Facebook() {
+    public Facebook(Context context) {
 
         // set the date format
         dateFormat = "yyyy-MM-dd'T'HH:mm:ss+SSSS";
 
         // get the facebook session
         mSession = Session.getActiveSession();
+
+        // keep the context
+        mContext = context;
 
     }
 
@@ -92,12 +100,18 @@ public class Facebook extends Social {
                                     }
                                 }
 
+                                // story is not always present so set a default and test for it
+                                String story = "";
+                                if (post.has("story")) {
+                                    story = post.getString("story");
+                                }
+
                                 // create a new SocialItem to put the post details into
                                 SocialItem socialItem = new SocialItem(
                                         post.getString("object_id"),
                                         from.getString("id"),
                                         from.getString("name"),
-                                        post.getString("story"),
+                                        story,
                                         convertDate(post.getString("created_time")),
                                         isLiked,
                                         "https://graph.facebook.com/" + from.getString("id") + "/picture?type=square",
@@ -124,9 +138,45 @@ public class Facebook extends Social {
     }
 
     @Override
-    public boolean likeItem(SocialItem item) {
-        return false;
+    public void likeItem(SocialItem item, final LikeListener listener) {
+
+        // make sure we've got publish permissions
+        checkAndRequestPublishPermissions();
+
+        new Request(
+                mSession,
+                // to do a like you nav to the post_id/likes
+                item.getUniqueId() + "/likes",
+                null,
+                // POST for an insert
+                HttpMethod.POST,
+                new Request.Callback() {
+                    @Override
+                    public void onCompleted(Response response) {
+
+                        listener.onLikeSuccess();
+                    }
+                }
+
+        ).executeAsync();
+
     }
 
+    private void checkAndRequestPublishPermissions() {
+
+
+        List<String> newPermissions = Arrays.asList("publish_actions", "publish_stream");
+        List<String> currentPermissions = mSession.getPermissions();
+
+        // check whether we have publish permissions
+        if (!currentPermissions.containsAll(newPermissions)) {
+
+            // seems not, lets get them
+            Session.NewPermissionsRequest request = new Session.NewPermissionsRequest((Activity) mContext,newPermissions);
+            mSession.requestNewPublishPermissions(request);
+
+        }
+
+    }
 
 }

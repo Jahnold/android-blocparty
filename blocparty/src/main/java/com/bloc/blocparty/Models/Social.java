@@ -1,14 +1,12 @@
 package com.bloc.blocparty.Models;
 
-import com.bloc.blocparty.Fragments.FeedFragment;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by matthewarnold on 16/01/15.
+ * Base class for the social media links
  */
 public abstract class Social {
 
@@ -21,9 +19,15 @@ public abstract class Social {
 
     }
 
+    public interface LikeListener {
+
+        void onLikeSuccess();
+
+    }
+
     public abstract void loadFeed(FeedListener listner);
 
-    public abstract boolean likeItem(SocialItem item);
+    public abstract void likeItem(SocialItem item, LikeListener listener);
 
     protected final Date convertDate(String dateString) {
 
