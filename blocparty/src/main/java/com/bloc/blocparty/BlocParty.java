@@ -4,23 +4,34 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.bloc.blocparty.Fragments.AccountsFragment;
 import com.bloc.blocparty.Fragments.FeedFragment;
+import com.bloc.blocparty.Fragments.SubmitFragment;
 import com.facebook.*;
 
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.fabric.sdk.android.Fabric;
 
 
 
-public class BlocParty extends Activity {
+public class BlocParty extends CameraActivity {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "AQmWwEByzqiVLCPQD7uGdCzft";
@@ -98,7 +109,7 @@ public class BlocParty extends Activity {
 
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
     }
@@ -148,6 +159,17 @@ public class BlocParty extends Activity {
                 // do nothing for now
                 return true;
 
+            case R.id.action_photo:
+
+                // load the submit photo fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new SubmitFragment(), "SubmitFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+                return true;
+
             default:
 
                 return super.onOptionsItemSelected(item);
@@ -164,8 +186,6 @@ public class BlocParty extends Activity {
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 
     }
-
-
 
 
 

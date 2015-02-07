@@ -5,6 +5,13 @@
     tools:context="com.bloc.blocparty.BlocParty" >
 
     <item
+        android:id="@+id/action_photo"
+        android:title="@string/action_photo"
+        android:icon="@android:drawable/ic_menu_camera"
+        app:showAsAction="always|withText"
+        />
+
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
