@@ -71,7 +71,7 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
         // if we have an open twitter session then load the feed
         if (twitterSession != null) {
 
-            com.bloc.blocparty.Models.Twitter twitter = new com.bloc.blocparty.Models.Twitter();
+            com.bloc.blocparty.Models.Twitter twitter = new com.bloc.blocparty.Models.Twitter(getActivity());
             twitter.loadFeed(this);
 
         }

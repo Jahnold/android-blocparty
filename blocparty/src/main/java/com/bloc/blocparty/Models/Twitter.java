@@ -1,5 +1,10 @@
 package com.bloc.blocparty.Models;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+
+import com.bloc.blocparty.R;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterApiClient;
@@ -7,20 +12,30 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.FavoriteService;
 import com.twitter.sdk.android.core.services.StatusesService;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import twitter4j.StatusUpdate;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 
 /**
  *  Handle all twitter interactions
  */
 public class Twitter extends Social {
 
+    private Context mContext;
 
-    public Twitter() {
+    public Twitter(Context context) {
 
         dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        mContext = context;
 
     }
 
@@ -110,5 +125,36 @@ public class Twitter extends Social {
         );
 
     }
+
+    public void postPhoto(Bitmap image, String comment) {
+
+
+        // transfer details from SDK to Twitter4J
+        ConfigurationBuilder builder = new ConfigurationBuilder();
+        builder.setOAuthConsumerKey(mContext.getString(R.string.twitter_key))
+               .setOAuthConsumerSecret(mContext.getString(R.string.twitter_secret))
+               .setOAuthAccessToken(com.twitter.sdk.android.Twitter.getSessionManager().getActiveSession().getAuthToken().token)
+               .setOAuthAccessTokenSecret(com.twitter.sdk.android.Twitter.getSessionManager().getActiveSession().getAuthToken().secret);
+
+        Configuration config = builder.build();
+        TwitterFactory factory = new TwitterFactory(config);
+        twitter4j.Twitter twitter = factory.getInstance();
+
+        // get a File from our image
+        String filePath = MediaStore.Images.Media.insertImage(mContext.getContentResolver(),image,null,null);
+        File imageFile = new File(filePath);
+
+        try {
+
+            StatusUpdate tweet = new StatusUpdate(comment);
+            tweet.setMedia(imageFile);
+            twitter.updateStatus(tweet);
+
+        }
+        catch (twitter4j.TwitterException e) { e.printStackTrace(); }
+
+    }
+
+
 
 }

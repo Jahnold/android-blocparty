@@ -2,6 +2,7 @@ package com.bloc.blocparty.Models;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -159,6 +160,35 @@ public class Facebook extends Social {
                 }
 
         ).executeAsync();
+
+    }
+
+    public void postPhoto(Bitmap image, String comment) {
+
+        Request request = Request.newUploadPhotoRequest(
+                mSession,
+                image,
+                new Request.Callback() {
+                    @Override
+                    public void onCompleted(Response response) {
+                        // tada
+                    }
+                }
+        );
+
+        if (comment != null) {
+
+            // get the default params
+            Bundle params = request.getParameters();
+
+            // add the comment to it
+            params.putString("message", comment);
+            request.setParameters(params);
+
+        }
+
+        // execute the request
+        request.executeAsync();
 
     }
 

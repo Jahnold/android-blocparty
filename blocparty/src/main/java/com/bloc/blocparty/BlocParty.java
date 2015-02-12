@@ -21,6 +21,7 @@ import com.facebook.*;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class BlocParty extends CameraActivity {
         super.onCreate(savedInstanceState);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
+        Fabric.with(this, new TweetComposer());
 
         // For Facebook
         uiHelper = new UiLifecycleHelper(this, callback);
