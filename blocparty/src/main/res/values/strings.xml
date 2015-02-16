@@ -28,4 +28,10 @@
     <string name="toast_image_saved">Image Saved To Gallery</string>
 
     <string name="btn_submit">Post Image</string>
+
+    <string name="new_collection_hint">Collection Name</string>
+    <string name="new_collection_title">New Collection</string>
+    <string name="new_collection_confirm">Create Collection</string>
+    <string name="new_collection_cancel">Cancel</string>
+
 </resources>

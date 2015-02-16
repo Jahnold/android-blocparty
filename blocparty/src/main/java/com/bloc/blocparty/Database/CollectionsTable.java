@@ -1,11 +1,13 @@
 package com.bloc.blocparty.Database;
 
+import android.database.sqlite.SQLiteDatabase;
+
 /**
- * Created by matthewarnold on 12/02/15.
+ *  Details of the collections table
  */
 public class CollectionsTable extends Table {
 
-    public NotesTable(String name) {
+    public CollectionsTable(String name) {
 
         super(name);
 
@@ -14,27 +16,16 @@ public class CollectionsTable extends Table {
     @Override
     public String getCreateStatement() {
 
-        String q = "CREATE TABLE Notes ( " +
+        String q = "CREATE TABLE Collections ( " +
                 "    _id INTEGER PRIMARY KEY, " +
-                "    text TEXT, " +
-                "    notebook_id INTEGER " +
+                "    name TEXT " +
                 ")";
         return q;
 
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqlLiteDatabase, int oldVersion, int NewVersion) {
+    public void onUpgrade(SQLiteDatabase sqlLiteDatabase, int oldVersion, int NewVersion) {}
 
-        // for version 2 add the 'image_url' field to the notes table
-        if (oldVersion == 1 & NewVersion == 2) {
 
-            sqlLiteDatabase.execSQL(
-                    "ALTER TABLE Notes " +
-                            "ADD COLUMN image_url TEXT"
-            );
-
-        }
-
-    }
 }
