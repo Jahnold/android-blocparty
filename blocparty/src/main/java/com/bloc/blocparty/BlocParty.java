@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.bloc.blocparty.Fragments.AccountsFragment;
+import com.bloc.blocparty.Fragments.CollectionsFragment;
 import com.bloc.blocparty.Fragments.FeedFragment;
 import com.bloc.blocparty.Fragments.SubmitFragment;
 import com.facebook.*;
@@ -167,6 +168,17 @@ public class BlocParty extends CameraActivity {
                 getFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, new SubmitFragment(), "SubmitFragment")
+                        .addToBackStack(null)
+                        .commit();
+
+                return true;
+
+            case R.id.action_collecions:
+
+                // load the collections fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, new CollectionsFragment(), "CollectionsFragment")
                         .addToBackStack(null)
                         .commit();
 

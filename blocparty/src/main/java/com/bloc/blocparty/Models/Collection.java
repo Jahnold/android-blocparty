@@ -17,6 +17,11 @@ public class Collection extends Model {
     private ArrayList<Friend> mFriends = new ArrayList<>();
     private Boolean friendsLoaded = false;
 
+    public Collection() {
+
+        mTableName = "Collections";
+    }
+
     // getus and setus
     public String getName() {
         return mName;

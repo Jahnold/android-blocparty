@@ -14,6 +14,7 @@
     <string name="action_accounts">Accounts</string>
     <string name="action_collections">Collections</string>
     <string name="action_photo">Take Photo</string>
+    <string name="action_new_collection">New Collection</string>
 
     <string name="twitter_btn_login">Log In With Twitter</string>
     <string name="twitter_btn_logout">Log Out of Twitter</string>

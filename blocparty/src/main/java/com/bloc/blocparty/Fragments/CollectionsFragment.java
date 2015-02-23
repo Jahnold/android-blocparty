@@ -1,9 +1,13 @@
 package com.bloc.blocparty.Fragments;
 
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,6 +34,14 @@ public class CollectionsFragment extends Fragment {
 
     public void setAction(int action) {
         this.action = action;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
     }
 
     @Nullable
@@ -69,6 +81,52 @@ public class CollectionsFragment extends Fragment {
         });
 
         return v;
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        // if it's not already loaded the inflate the menu for the 'add collection' button
+        if (menu.findItem(R.id.action_new_collection) == null) {
+
+            inflater.inflate(R.menu.collections,menu);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_new_collection) {
+
+            // create a new collection dialog and set the listener
+            NewCollectionDialogFragment dialog = new NewCollectionDialogFragment();
+            dialog.setListener(new NewCollectionDialogFragment.NewCollectionListener() {
+                @Override
+                public void onNewCollectionConfirm(DialogFragment dialog, String name) {
+
+                    // create a new collection
+                    Collection newCollection = new Collection();
+                    newCollection.setName(name);
+                    newCollection.save();
+                    mAdapter.add(newCollection);
+
+                }
+            });
+
+            // show our dialog
+            dialog.show(getFragmentManager(),"NewCollectionDialog");
+
+            return true;
+
+        }
+        else {
+
+            return super.onOptionsItemSelected(item);
+
+        }
 
     }
 }

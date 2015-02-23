@@ -1,6 +1,7 @@
 package com.bloc.blocparty.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bloc.blocparty.Models.Collection;
+import com.bloc.blocparty.Models.ImageHandler;
 import com.bloc.blocparty.R;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class CollectionItemAdapter extends ArrayAdapter<Collection> {
     // working copy of the feed
     private ArrayList<Collection> mCollections;
 
+    private ImageHandler mImageHandler = new ImageHandler(getContext());
 
     // constructor
     public CollectionItemAdapter(Context context, int textViewResourceId, ArrayList<Collection> items) {
@@ -54,14 +57,48 @@ public class CollectionItemAdapter extends ArrayAdapter<Collection> {
             ImageView profile3 = (ImageView) convertView.findViewById(R.id.coll_profile_3);
             ImageView profile4 = (ImageView) convertView.findViewById(R.id.coll_profile_4);
 
+            int collSize = collection.getFriends().size();
+
             // set values from the collection
             name.setText(collection.getName());
-            count.setText(String.valueOf(collection.getFriends().size()) + " Users");
+            count.setText(String.valueOf(collSize) + " Users");
 
-
+            // set the four profile pictures
+            if (collSize > 0) {
+                setProfilePicture(profile1, 0, collection);
+            }
+            if (collSize > 1) {
+                setProfilePicture(profile2, 1, collection);
+            }
+            if (collSize > 2) {
+                setProfilePicture(profile3, 2, collection);
+            }
+            if (collSize > 3) {
+                setProfilePicture(profile4, 3, collection);
+            }
 
         }
 
         return convertView;
     }
+
+    private void setProfilePicture(final ImageView imageView, int position, Collection collection) {
+
+        if (collection.getFriends().get(position) != null) {
+
+            mImageHandler.loadImage(
+                    collection.getFriends().get(position).getUniqueId(),
+                    "",
+                    new ImageHandler.ImageHandlerListener() {
+                        @Override
+                        public void onImageLoaded(Bitmap image) {
+                            imageView.setImageBitmap(image);
+                        }
+                    }
+            );
+
+        }
+
+    }
+
 }

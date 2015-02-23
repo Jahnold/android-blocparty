@@ -12,6 +12,13 @@
         tools:ignore="AppCompatResource" />
 
     <item
+        android:id="@+id/action_collecions"
+        android:title="@string/action_collections"
+        android:icon="@android:drawable/ic_menu_gallery"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

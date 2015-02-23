@@ -18,6 +18,11 @@ public class Friend extends Model {
     private int mNetwork;
     private Long mCollectionId;
 
+    public Friend() {
+
+        mTableName = "Friends";
+    }
+
     // getters and setters
 
     public String getName() {
@@ -65,7 +70,6 @@ public class Friend extends Model {
         values.put("collection_id", mCollectionId);
         return values;
     }
-
 
 
 }

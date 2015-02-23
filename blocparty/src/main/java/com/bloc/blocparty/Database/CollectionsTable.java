@@ -20,6 +20,7 @@ public class CollectionsTable extends Table {
                 "    _id INTEGER PRIMARY KEY, " +
                 "    name TEXT " +
                 ")";
+
         return q;
 
     }

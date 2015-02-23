@@ -19,13 +19,12 @@ public class DbHelper extends SQLiteOpenHelper {
     private static Set<Table> sTables = new HashSet<>();
     static {
         sTables.add(new CollectionsTable("Collections"));
+        sTables.add(new FriendsTable("Friends"));
     }
 
 
     public DbHelper(Context context) {
-
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
     }
 
     @Override
