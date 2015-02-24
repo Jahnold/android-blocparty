@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.bloc.blocparty.Adapters.CollectionItemAdapter;
 import com.bloc.blocparty.Models.Collection;
 import com.bloc.blocparty.Models.CollectionFactory;
+import com.bloc.blocparty.Models.Friend;
 import com.bloc.blocparty.R;
 
 import java.util.ArrayList;
@@ -25,16 +26,21 @@ import java.util.ArrayList;
  */
 public class CollectionsFragment extends Fragment {
 
-    private static final int ADD = 0;
-    private static final int LOAD = 1;
+    public static final int ADD = 0;
+    public static final int LOAD = 1;
 
     private CollectionItemAdapter mAdapter;
+    private Friend mFriend;
+    private int action = LOAD;
 
-    private int action = ADD;
 
     public void setAction(int action) {
         this.action = action;
     }
+    public void setFriend(Friend friend) {
+        mFriend = friend;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,14 +74,34 @@ public class CollectionsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                // get the collection that was clicked on
+                Collection collection =  mAdapter.getItem(position);
+
                 // depends on whether we are loading a collection or adding a friend to a collection
                 if (action == ADD) {
 
+                    // set the collection id and save
+                    mFriend.setCollectionId(collection.getId());
+                    mFriend.save();
 
                 }
                 else {
 
+                    // pass the feed fragment the collection
+                    FeedFragment feedFragment = (FeedFragment) getFragmentManager().findFragmentByTag("FeedFragment");
+                    feedFragment.setCollection(collection);
+                    feedFragment.setFeedType(FeedFragment.LOAD_COLLECTION);
+                    feedFragment.clearFeed();
+
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container, feedFragment)
+                            .addToBackStack(null)
+                            .commit();
+
                 }
+
+                // go back to the feed fragment
 
             }
         });

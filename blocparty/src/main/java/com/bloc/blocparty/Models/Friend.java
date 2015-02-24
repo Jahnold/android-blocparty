@@ -2,16 +2,15 @@ package com.bloc.blocparty.Models;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 
 /**
  *  Friend Model
  */
 public class Friend extends Model {
 
-    private static final int FACEBOOK = 0;
-    private static final int TWITTER = 1;
-    private static final int INSTAGRAM = 2;
+    public static final int FACEBOOK = 0;
+    public static final int TWITTER = 1;
+    public static final int INSTAGRAM = 2;
 
     private String mName;
     private String mUniqueId;

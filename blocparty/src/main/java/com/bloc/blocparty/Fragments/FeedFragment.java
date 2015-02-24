@@ -12,7 +12,9 @@ import android.widget.ListView;
 
 import com.bloc.blocparty.Adapters.FeedItemAdapter;
 import com.bloc.blocparty.Instagram.InstagramSession;
+import com.bloc.blocparty.Models.Collection;
 import com.bloc.blocparty.Models.Facebook;
+import com.bloc.blocparty.Models.Friend;
 import com.bloc.blocparty.Models.Instagram;
 import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
@@ -29,12 +31,23 @@ import java.util.ArrayList;
  */
 public class FeedFragment extends Fragment implements Social.FeedListener{
 
+    public static int LOAD_ALL = 0;
+    public static int LOAD_COLLECTION = 1;
+
+    private int mFeedType = LOAD_ALL;
     private ArrayList<SocialItem> mFeed = new ArrayList<>();
     private FeedItemAdapter mAdapter;
+    private ListView mFeedListView;
+    private Collection mCollection;
 
-    private String TAG = "FeedFragment";
 
     public FeedFragment() {}
+
+    // setter
+    public void setCollection(Collection collection) {
+        mCollection = collection;
+    }
+    public void setFeedType(int feedType) { mFeedType = feedType; }
 
     @Nullable
     @Override
@@ -44,7 +57,35 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
         LinearLayout v = (LinearLayout) inflater.inflate(R.layout.fragment_feed, container, false);
 
         // get ref to the list view
-        ListView feedListView = (ListView) v.findViewById(R.id.feed_list);
+        mFeedListView = (ListView) v.findViewById(R.id.feed_list);
+
+        // either load all or load the collection
+        if (mFeedType == LOAD_ALL) {
+            loadAll();
+        }
+        else {
+            loadCollection();
+        }
+
+        // set up the feed item adapter
+        mAdapter = new FeedItemAdapter(
+                getActivity(),
+                0,
+                mFeed
+        );
+
+        // introduce the list view to the adapter
+        mFeedListView.setAdapter(mAdapter);
+
+        // return the view
+        return v;
+
+    }
+
+    /**
+     *  Loads all latest items from all logged in networks
+     */
+    private void loadAll() {
 
         // get facebook
         Session fbSession = Session.getActiveSession();
@@ -63,7 +104,6 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
                 }
             }
         });
-
 
         // get twitter
         TwitterSession twitterSession = Twitter.getSessionManager().getActiveSession();
@@ -86,22 +126,36 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
             instagram.loadFeed(this);
 
         }
-
-        // set up the feed item adapter
-        mAdapter = new FeedItemAdapter(
-                getActivity(),
-                0,
-                mFeed
-        );
-
-        // introduce the list view to the adapter
-        feedListView.setAdapter(mAdapter);
-
-        // return the view
-        return v;
-
     }
 
+    /**
+    *   Loads all the latest items from the users in the collection
+    *
+    */
+    private void loadCollection() {
+
+        Facebook fb = new Facebook(getActivity());
+        com.bloc.blocparty.Models.Twitter twitter = new com.bloc.blocparty.Models.Twitter(getActivity());
+        Instagram instagram = new Instagram(getActivity());
+
+        // loop through all the friends in the collection and load the feed from the relevant network
+        for (Friend friend : mCollection.getFriends()) {
+
+            switch (friend.getNetwork()) {
+
+                case Friend.FACEBOOK:
+                    fb.loadUserFeed(friend.getUniqueId(), this);
+                    break;
+                case Friend.TWITTER:
+                    twitter.loadUserFeed(friend.getUniqueId(), this);
+                    break;
+                case Friend.INSTAGRAM:
+                    instagram.loadUserFeed(friend.getUniqueId(), this);
+
+            }
+        }
+
+    }
 
     public void clearFeed() {
 
@@ -111,7 +165,6 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
     public void addToFeed(ArrayList<SocialItem> newItems) {
 
-        //mFeed.addAll(newItems);
         mAdapter.addAll(newItems);
 
     }
@@ -126,7 +179,6 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
         // add the items to the feed and update the adapter
         addToFeed(items);
-        //notifyUpdate();
 
     }
 

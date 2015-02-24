@@ -9,36 +9,47 @@
         android:id="@+id/coll_text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         />
 
     <TextView
         android:id="@+id/coll_text_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/coll_text_name"
+        android:layout_margin="5dp"
         />
 
     <ImageView
         android:id="@+id/coll_profile_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_alignParentRight="true"
         />
 
     <ImageView
         android:id="@+id/coll_profile_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@id/coll_profile_1"
+        android:layout_margin="5dp"
         />
 
     <ImageView
         android:id="@+id/coll_profile_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@id/coll_profile_2"
+        android:layout_margin="5dp"
         />
 
     <ImageView
         android:id="@+id/coll_profile_4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@id/coll_profile_3"
+        android:layout_margin="5dp"
         />
 
 </RelativeLayout>

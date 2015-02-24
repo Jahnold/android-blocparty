@@ -100,6 +100,71 @@ public class Twitter extends Social {
 
     }
 
+    /**
+     *  Loads the feed items of a single user
+     *
+     */
+    public void loadUserFeed(String user, final FeedListener listener) {
+
+        StatusesService service = com.twitter.sdk.android.Twitter.getApiClient().getStatusesService();
+
+        service.userTimeline(
+                Long.valueOf(user),     // user id
+                null,                   // screen name
+                null,                   // since
+                30L,                    // count
+                null,                   // max id
+                false,                  // trim user data
+                true,                   // exclude replies
+                true,                   // contributor details
+                true,                   // include retweets
+                new Callback<List<Tweet>>() {
+                    @Override
+                    public void success(Result<List<Tweet>> listResult) {
+
+                        ArrayList<SocialItem> items = new ArrayList<SocialItem>();
+
+                        Iterator iterator = listResult.data.iterator();
+                        while (iterator.hasNext()) {
+
+                            Tweet tweet = (Tweet) iterator.next();
+
+                            // we're only interested in tweets with 'media
+                            if (tweet.entities.media != null) {
+
+                                // create a new social item from the tweet
+                                SocialItem socialItem = new SocialItem(
+                                        tweet.idStr,
+                                        String.valueOf(tweet.user.id),
+                                        tweet.user.name,
+                                        tweet.text,
+                                        convertDate(tweet.createdAt),
+                                        tweet.favorited,
+                                        tweet.user.profileImageUrl,
+                                        tweet.entities.media.get(0).mediaUrl,
+                                        Twitter.this
+                                );
+
+                                // add this to the array list
+                                items.add(socialItem);
+
+                            }
+
+                        }
+
+                        listener.onFeedLoaded(items);
+
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+
+                    }
+                }
+        );
+
+    }
+
     @Override
     public void likeItem(SocialItem item, final LikeListener listener) {
 

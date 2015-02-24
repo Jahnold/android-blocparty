@@ -16,10 +16,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bloc.blocparty.BlocParty;
+import com.bloc.blocparty.Fragments.CollectionsFragment;
 import com.bloc.blocparty.Fragments.PhotoViewFragment;
+import com.bloc.blocparty.Models.Facebook;
+import com.bloc.blocparty.Models.Friend;
 import com.bloc.blocparty.Models.ImageHandler;
+import com.bloc.blocparty.Models.Instagram;
 import com.bloc.blocparty.Models.Social;
 import com.bloc.blocparty.Models.SocialItem;
+import com.bloc.blocparty.Models.Twitter;
 import com.bloc.blocparty.R;
 
 import java.util.ArrayList;
@@ -141,12 +146,41 @@ public class FeedItemAdapter extends ArrayAdapter<SocialItem> {
                             // save image
                             mImageHandler.saveImageToGallery(item.getUniqueId());
                             break;
+
                         case 1:
                             // share image
                             mImageHandler.shareImage(item.getUniqueId());
                             break;
+
                         case 2:
                             // add user to collection
+
+                            // create a friend object
+                            Friend friend = new Friend();
+                            friend.setName(item.getUserName());
+                            friend.setUniqueId(item.getUserId());
+                            if (item.getNetwork().getClass() == Facebook.class) {
+                                friend.setNetwork(Friend.FACEBOOK);
+                            }
+                            if (item.getNetwork().getClass() == Twitter.class) {
+                                friend.setNetwork(Friend.TWITTER);
+                            }
+                            if (item.getNetwork().getClass() == Instagram.class) {
+                                friend.setNetwork(Friend.INSTAGRAM);
+                            }
+
+                            // create a collections fragment, pass it our friend and tell it we're adding
+                            CollectionsFragment collectionsFragment = new CollectionsFragment();
+                            collectionsFragment.setAction(CollectionsFragment.ADD);
+                            collectionsFragment.setFriend(friend);
+
+                            // load the collections fragment into view
+                            FragmentManager fm = ((BlocParty) getContext()).getFragmentManager();
+                            fm.beginTransaction()
+                                    .replace(R.id.container, collectionsFragment, "CollectionsFragment")
+                                    .addToBackStack(null)
+                                    .commit();
+
                             break;
                     }
                     return false;

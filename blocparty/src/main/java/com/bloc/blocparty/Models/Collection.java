@@ -72,8 +72,8 @@ public class Collection extends Model {
 
         // get the column ints
         int idColumn = cursor.getColumnIndex("_id");
-        int nameColumn = cursor.getColumnIndex("_id");
-        int uniqueIdColumn = cursor.getColumnIndex("_id");
+        int nameColumn = cursor.getColumnIndex("name");
+        int uniqueIdColumn = cursor.getColumnIndex("unique_id");
         int networkColumn = cursor.getColumnIndex("network");
 
         while (cursor.moveToNext()) {

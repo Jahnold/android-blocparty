@@ -115,6 +115,82 @@ public class Instagram extends Social {
 
     }
 
+    /**
+     *  Loads the feed items of a single user
+     *
+     */
+    public void loadUserFeed(final String user, final FeedListener listener) {
+
+        if (mSession.getAccessToken() != null) {
+
+            new AsyncTask<Void, Void, String>() {
+
+                @Override
+                protected String doInBackground(Void... params) {
+
+                    String response = "";
+
+                    try {
+
+                        URL url = new URL("https://api.instagram.com/v1/users/" + user + "/media/recent/?access_token=" + mSession.getAccessToken());
+                        InputStream inputStream = url.openConnection().getInputStream();
+                        response = streamToString(inputStream);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    return response;
+
+                }
+
+                @Override
+                protected void onPostExecute(String response) {
+
+                    ArrayList<SocialItem> items = new ArrayList<>();
+
+                    try {
+
+                        JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject post = jsonArray.getJSONObject(i);
+                            JSONObject user = post.getJSONObject("user");
+
+                            // create a new social item to put the post details in
+                            SocialItem item = new SocialItem(
+                                    post.getString("id"),
+                                    user.getString("id"),
+                                    user.getString("full_name"),
+                                    post.getJSONObject("caption").getString("text"),
+                                    new Date(Long.valueOf(post.getString("created_time")) * 1000),
+                                    post.getBoolean("user_has_liked"),
+                                    user.getString("profile_picture"),
+                                    post.getJSONObject("images").getJSONObject("standard_resolution").getString("url"),
+                                    Instagram.this
+                            );
+
+                            // add the item to the list
+                            items.add(item);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    // pass the items list back to the listener
+                    listener.onFeedLoaded(items);
+
+                }
+
+            }.execute();
+
+        }
+
+    }
+
     @Override
     public void likeItem(final SocialItem item, final LikeListener listener) {
 
