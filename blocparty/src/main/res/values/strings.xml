@@ -15,18 +15,21 @@
     <string name="action_collections">Collections</string>
     <string name="action_photo">Take Photo</string>
     <string name="action_new_collection">New Collection</string>
+    <string name="action_home">Home</string>
 
     <string name="twitter_btn_login">Log In With Twitter</string>
     <string name="twitter_btn_logout">Log Out of Twitter</string>
 
-    <string name="instagram_btn_login">Log In With Instagram</string>
-    <string name="instagram_btn_logout">Log Out of Instagram</string>
+    <string name="instagram_btn_login">Log in with Instagram</string>
+    <string name="instagram_btn_logout">Log out of Instagram</string>
 
     <string name="menu_save">Save Image</string>
     <string name="menu_share">Share Image</string>
     <string name="menu_collection">Add To Collection</string>
 
     <string name="toast_image_saved">Image Saved To Gallery</string>
+    <string name="toast_added_to_collection">Added to Collection</string>
+    <string name="toast_image_posted">Image Posted to FB and Twitter</string>
 
     <string name="btn_submit">Post Image</string>
 
@@ -34,5 +37,9 @@
     <string name="new_collection_title">New Collection</string>
     <string name="new_collection_confirm">Create Collection</string>
     <string name="new_collection_cancel">Cancel</string>
+
+    <string name="tutorial_btn_skip">Skip Tutorial</string>
+    <string name="tutorial_btn_next">Next</string>
+    <string name="tutorial_btn_finish">Finish</string>
 
 </resources>

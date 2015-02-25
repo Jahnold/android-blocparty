@@ -4,10 +4,12 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.bloc.blocparty.Fragments.AccountsFragment;
 import com.bloc.blocparty.Fragments.CollectionsFragment;
 import com.bloc.blocparty.Fragments.FeedFragment;
+import com.bloc.blocparty.Fragments.OnBoardingFragment;
 import com.bloc.blocparty.Fragments.SubmitFragment;
 import com.facebook.*;
 
@@ -38,6 +41,8 @@ public class BlocParty extends CameraActivity {
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "AQmWwEByzqiVLCPQD7uGdCzft";
     private static final String TWITTER_SECRET = "TAEh29REDU8NUMoaM8bicT0CBKfPIuXQkTqqf9RUaVjaJmYmyg";
+
+    private static final String PREF_ONBOARDED = "com.blocparty.onboarded";
 
     // keep track of the resumed state of the app
     private boolean isResumed = false;
@@ -68,9 +73,24 @@ public class BlocParty extends CameraActivity {
 
         // set the feed fragment as the default view
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new FeedFragment(), "FeedFragment")
-                    .commit();
+
+            // check to see whether the user has on-boarded
+            if (hasOnBoarded()) {
+
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container, new FeedFragment(), "FeedFragment")
+                        .commit();
+
+            }
+            else {
+
+                // show the on-boarding fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.container, new OnBoardingFragment(), "OnBoardingFragment")
+                        .commit();
+
+            }
         }
     }
 
@@ -133,15 +153,19 @@ public class BlocParty extends CameraActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.home:
+            case R.id.action_home:
 
                 // go back to the feed fragment
+                FeedFragment feedFragment = (FeedFragment) getFragmentManager().findFragmentByTag("FeedFragment");
+                feedFragment.setFeedType(FeedFragment.LOAD_ALL);
+                feedFragment.reloadFeed();
+
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.container, getFragmentManager().findFragmentByTag("FeedFragment"))
+                        .replace(R.id.container, feedFragment)
                         .commit();
 
-                getActionBar().setDisplayHomeAsUpEnabled(false);
+                return true;
 
             case R.id.action_accounts:
 
@@ -151,9 +175,6 @@ public class BlocParty extends CameraActivity {
                         .replace(R.id.container, new AccountsFragment(),"AccountsFragment")
                         .addToBackStack(null)
                         .commit();
-
-                // set the actionbar to back
-                getActionBar().setDisplayHomeAsUpEnabled(true);
 
                 return true;
 
@@ -198,6 +219,17 @@ public class BlocParty extends CameraActivity {
      *
      */
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+
+    }
+
+    /**
+     *  Check whether the user has seen the on-boarding tutorial
+     *
+     */
+    private boolean hasOnBoarded() {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean(PREF_ONBOARDED, true);
 
     }
 

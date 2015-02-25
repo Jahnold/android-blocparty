@@ -82,10 +82,24 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
 
     }
 
+    public void reloadFeed() {
+
+        // either load all or load the collection
+        if (mFeedType == LOAD_ALL) {
+            loadAll();
+        }
+        else {
+            loadCollection();
+        }
+
+    }
+
     /**
      *  Loads all latest items from all logged in networks
      */
     private void loadAll() {
+
+        clearFeed();
 
         // get facebook
         Session fbSession = Session.getActiveSession();
@@ -133,6 +147,8 @@ public class FeedFragment extends Fragment implements Social.FeedListener{
     *
     */
     private void loadCollection() {
+
+        clearFeed();
 
         Facebook fb = new Facebook(getActivity());
         com.bloc.blocparty.Models.Twitter twitter = new com.bloc.blocparty.Models.Twitter(getActivity());

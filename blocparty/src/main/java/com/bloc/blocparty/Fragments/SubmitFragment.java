@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bloc.blocparty.CameraActivity;
+import com.bloc.blocparty.Models.Facebook;
+import com.bloc.blocparty.Models.Twitter;
 import com.bloc.blocparty.R;
 
 import java.io.File;
@@ -58,10 +60,19 @@ public class SubmitFragment extends Fragment {
             public void onClick(View v) {
 
                 // post to FB
+                Facebook fb = new Facebook(getActivity());
 
                 // post to Twitter
+                Twitter twitter = new Twitter(getActivity());
 
                 // return to Feed
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, getFragmentManager().findFragmentByTag("FeedFragment"))
+                        .commit();
+
+                // success toast
+                Toast.makeText(getActivity(),R.string.toast_image_posted,Toast.LENGTH_SHORT).show();
 
             }
         });

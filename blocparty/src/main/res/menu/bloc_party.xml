@@ -5,6 +5,12 @@
     tools:context="com.bloc.blocparty.BlocParty" >
 
     <item
+        android:id="@+id/action_home"
+        android:title="@string/action_home"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/action_photo"
         android:title="@string/action_photo"
         android:icon="@android:drawable/ic_menu_camera"

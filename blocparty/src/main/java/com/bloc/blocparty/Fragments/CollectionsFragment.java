@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bloc.blocparty.Adapters.CollectionItemAdapter;
 import com.bloc.blocparty.Models.Collection;
@@ -77,6 +78,9 @@ public class CollectionsFragment extends Fragment {
                 // get the collection that was clicked on
                 Collection collection =  mAdapter.getItem(position);
 
+                // get a ref to the feed fragment
+                FeedFragment feedFragment = (FeedFragment) getFragmentManager().findFragmentByTag("FeedFragment");
+
                 // depends on whether we are loading a collection or adding a friend to a collection
                 if (action == ADD) {
 
@@ -84,24 +88,26 @@ public class CollectionsFragment extends Fragment {
                     mFriend.setCollectionId(collection.getId());
                     mFriend.save();
 
+                    // show a toast to confirm action
+                    Toast.makeText(getActivity(),R.string.toast_added_to_collection,Toast.LENGTH_SHORT).show();
+
                 }
                 else {
 
-                    // pass the feed fragment the collection
-                    FeedFragment feedFragment = (FeedFragment) getFragmentManager().findFragmentByTag("FeedFragment");
+                    // pass the feed fragment the collection and set it to load collection
                     feedFragment.setCollection(collection);
                     feedFragment.setFeedType(FeedFragment.LOAD_COLLECTION);
                     feedFragment.clearFeed();
 
-                    getFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.container, feedFragment)
-                            .addToBackStack(null)
-                            .commit();
-
                 }
 
-                // go back to the feed fragment
+                // load the feed fragment into view
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, feedFragment)
+                        .addToBackStack(null)
+                        .commit();
+
 
             }
         });

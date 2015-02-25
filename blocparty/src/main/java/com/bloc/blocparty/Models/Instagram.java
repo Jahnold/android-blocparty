@@ -72,37 +72,7 @@ public class Instagram extends Social {
                 @Override
                 protected void onPostExecute(String response) {
 
-                    ArrayList<SocialItem> items = new ArrayList<>();
-
-                    try {
-
-                        JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-
-                            JSONObject post = jsonArray.getJSONObject(i);
-                            JSONObject user = post.getJSONObject("user");
-
-                            // create a new social item to put the post details in
-                            SocialItem item = new SocialItem(
-                                    post.getString("id"),
-                                    user.getString("id"),
-                                    user.getString("full_name"),
-                                    post.getJSONObject("caption").getString("text"),
-                                    new Date(Long.valueOf(post.getString("created_time"))*1000),
-                                    post.getBoolean("user_has_liked"),
-                                    user.getString("profile_picture"),
-                                    post.getJSONObject("images").getJSONObject("standard_resolution").getString("url"),
-                                    Instagram.this
-                            );
-
-                            // add the item to the list
-                            items.add(item);
-                        }
-
-                    }
-                    catch (JSONException e) { e.printStackTrace();}
+                    ArrayList<SocialItem> items = parseResponse(response);
 
                     // pass the items list back to the listener
                     listener.onFeedLoaded(items);
@@ -147,38 +117,7 @@ public class Instagram extends Social {
                 @Override
                 protected void onPostExecute(String response) {
 
-                    ArrayList<SocialItem> items = new ArrayList<>();
-
-                    try {
-
-                        JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
-                        JSONArray jsonArray = jsonObject.getJSONArray("data");
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-
-                            JSONObject post = jsonArray.getJSONObject(i);
-                            JSONObject user = post.getJSONObject("user");
-
-                            // create a new social item to put the post details in
-                            SocialItem item = new SocialItem(
-                                    post.getString("id"),
-                                    user.getString("id"),
-                                    user.getString("full_name"),
-                                    post.getJSONObject("caption").getString("text"),
-                                    new Date(Long.valueOf(post.getString("created_time")) * 1000),
-                                    post.getBoolean("user_has_liked"),
-                                    user.getString("profile_picture"),
-                                    post.getJSONObject("images").getJSONObject("standard_resolution").getString("url"),
-                                    Instagram.this
-                            );
-
-                            // add the item to the list
-                            items.add(item);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ArrayList<SocialItem> items = parseResponse(response);
 
                     // pass the items list back to the listener
                     listener.onFeedLoaded(items);
@@ -188,6 +127,55 @@ public class Instagram extends Social {
             }.execute();
 
         }
+
+    }
+
+    /**
+     *  Turns the raw Instagram JSON response into an array list of Social Items
+     *
+     */
+    private ArrayList<SocialItem> parseResponse(String response) {
+
+        ArrayList<SocialItem> items = new ArrayList<>();
+
+        try {
+
+            JSONObject jsonObject = (JSONObject) new JSONTokener(response).nextValue();
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject post = jsonArray.getJSONObject(i);
+                JSONObject user = post.getJSONObject("user");
+
+                // caption isn't always set so default to empty string
+                String caption = "";
+                if (post.has("caption") && !post.isNull("caption")) {
+                    caption = post.getJSONObject("caption").getString("text");
+                }
+
+
+                // create a new social item to put the post details in
+                SocialItem item = new SocialItem(
+                        post.getString("id"),
+                        user.getString("id"),
+                        user.getString("full_name"),
+                        caption,
+                        new Date(Long.valueOf(post.getString("created_time"))*1000),
+                        post.getBoolean("user_has_liked"),
+                        user.getString("profile_picture"),
+                        post.getJSONObject("images").getJSONObject("standard_resolution").getString("url"),
+                        Instagram.this
+                );
+
+                // add the item to the list
+                items.add(item);
+            }
+
+        }
+        catch (JSONException e) { e.printStackTrace();}
+
+        return items;
 
     }
 

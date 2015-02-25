@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        />
+
+    <Button
+        android:id="@+id/btn_skip_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tutorial_btn_skip"
+        android:layout_below="@id/image_tutorial"
+        />
+
+    <Button
+        android:id="@+id/btn_next_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tutorial_btn_next"
+        android:layout_toRightOf="@id/btn_skip_tutorial"
+        />
+
+</RelativeLayout>
