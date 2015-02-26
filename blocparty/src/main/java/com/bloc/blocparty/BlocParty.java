@@ -229,7 +229,7 @@ public class BlocParty extends CameraActivity {
     private boolean hasOnBoarded() {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        return prefs.getBoolean(PREF_ONBOARDED, true);
+        return prefs.getBoolean(PREF_ONBOARDED, false);
 
     }
 
